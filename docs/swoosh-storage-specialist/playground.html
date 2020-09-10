@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Playground | Swoosh Storage Specialist</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
+  <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
+  <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+<h1 class="text-center title is-1 mt-12">Web Storage Playground</h1>
+<h2 class="text-center title is-6 mt-4">
+  Local Storage / Session Storage / Cookie 3 in 1 chrome extension:
+  <a href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd" class="underline">Swoosh Storage Specialist</a>
+</h2>
+<div id="app">
+  <section class="section">
+    <div class="container">
+      <div class="columns">
+        <div class="column">
+          <b-field>
+            <b-radio-button
+              v-model="selectedType"
+              native-value="local"
+              type="is-primary">
+              <span>Local Storage</span>
+            </b-radio-button>
+            <b-radio-button v-model="selectedType"
+              native-value="session"
+              type="is-info">
+              <span>Session Storage</span>
+            </b-radio-button>
+            <b-radio-button v-model="selectedType"
+              native-value="cookie"
+              type="is-warning">
+              <span>Cookie</span>
+            </b-radio-button>
+          </b-field>
+
+        </div>
+        <div class="column">
+          <div class="text-center">
+            <b-button class="text-xl" type="is-text" tag="a"
+              href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd">
+              Install chrome extension ? {{ isInstalled }}
+            </b-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column">
+          <b-field label="Key" custom-class="is-large" :type="theme">
+            <b-input v-model="key" size="is-large" :placeholder="keyPlaceHolder" icon-right="no"></b-input>
+          </b-field>
+          <b-field label="Value" custom-class="is-large" :type="theme">
+            <b-input
+              v-model="value"
+              :disabled="disabled"
+              :has-counter="hasCounter"
+              maxlength="∞"
+              type="textarea"
+              :placeholder="valuePlaceHolder"
+              icon-right="no"
+            ></b-input>
+          </b-field>
+          <b-button :type="theme" size="is-large">Save {{displayType}}</b-button>
+        </div>
+        <div class="column">
+
+          <div class="field">
+            <b-radio
+              v-model="preset"
+              native-value="freestyle"
+              type="is-success"
+            >
+              Freestyle
+            </b-radio>
+          </div>
+          <div class="field">
+            <b-radio v-model="preset"
+              native-value="clock"
+              type="is-success"
+            >
+              Clock (Auto update every second)
+            </b-radio>
+          </div>
+          <div class="field">
+            <b-radio v-model="preset"
+              native-value="json"
+              type="is-success"
+            >
+              JSON
+            </b-radio>
+          </div>
+          <div class="field">
+            <b-radio v-model="preset"
+              native-value="long"
+              type="is-success"
+             >
+              Long Text
+            </b-radio>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<footer class="footer">
+  <div class="content has-text-centered">
+    &copy; steampunck
+  </div>
+</footer>
+<iframe id="iframe" style="display: none"></iframe>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+<script>
+  window.playground = new Vue({
+    el: '#app',
+    data: {
+      key: "",
+      value: "",
+      isInstalled: false,
+      hasCounter: false,
+      disabled: false,
+      message: 'Playground',
+      selectedType: 'local',
+      preset: 'freestyle',
+      sampleTimer: null
+    },
+    computed: {
+      displayType: function () {
+        switch (this.selectedType) {
+          case "session":
+            return "SessionStorage";
+          case "local":
+            return "LocalStorage";
+          case "cookie":
+            return "Cookie";
+        }
+      },
+      theme: function () {
+        switch (this.selectedType) {
+          case "local":
+            return "is-primary";
+          case "session":
+            return "is-info";
+          case "cookie":
+            return "is-warning";
+        }
+      },
+      valuePlaceHolder: function () {
+        return this.displayType + ' Value';
+      },
+      keyPlaceHolder: function () {
+        return this.displayType + ' Key';
+      }
+    },
+    watch: {
+      preset: function (val) {
+        switch(val) {
+          case "freestyle":
+            this.key = "";
+            this.value = "";
+            this.hasCounter = false;
+            this.disabled = false;
+            if (this.sampleTimer) {
+              this.stopClock();
+            }
+            break;
+          case "clock":
+            this.key = "clock";
+            this.hasCounter = false;
+            this.disabled = true;
+            this.startClock();
+            break;
+          case "json":
+            this.key = "json";
+            this.value = `{
+   "web-app":{
+      "servlet":[
+         {
+            "servlet-name":"cofaxCDS",
+            "servlet-class":"org.cofax.cds.CDSServlet",
+            "init-param":{
+               "configGlossary:installationAt":"Philadelphia, PA",
+               "configGlossary:adminEmail":"ksm@pobox.com",
+               "configGlossary:poweredBy":"Cofax",
+               "configGlossary:poweredByIcon":"/images/cofax.gif",
+               "configGlossary:staticPath":"/content/static",
+               "templateProcessorClass":"org.cofax.WysiwygTemplate",
+               "templateLoaderClass":"org.cofax.FilesTemplateLoader",
+               "templatePath":"templates",
+               "templateOverridePath":"",
+               "defaultListTemplate":"listTemplate.htm",
+               "defaultFileTemplate":"articleTemplate.htm",
+               "useJSP":false,
+               "jspListTemplate":"listTemplate.jsp",
+               "jspFileTemplate":"articleTemplate.jsp",
+               "cachePackageTagsTrack":200,
+               "cachePackageTagsStore":200,
+               "cachePackageTagsRefresh":60,
+               "cacheTemplatesTrack":100,
+               "cacheTemplatesStore":50,
+               "cacheTemplatesRefresh":15,
+               "cachePagesTrack":200,
+               "cachePagesStore":100,
+               "cachePagesRefresh":10,
+               "cachePagesDirtyRead":10,
+               "searchEngineListTemplate":"forSearchEnginesList.htm",
+               "searchEngineFileTemplate":"forSearchEngines.htm",
+               "searchEngineRobotsDb":"WEB-INF/robots.db",
+               "useDataStore":true,
+               "dataStoreClass":"org.cofax.SqlDataStore",
+               "redirectionClass":"org.cofax.SqlRedirection",
+               "dataStoreName":"cofax",
+               "dataStoreDriver":"com.microsoft.jdbc.sqlserver.SQLServerDriver",
+               "dataStoreUrl":"jdbc:microsoft:sqlserver://LOCALHOST:1433;DatabaseName=goon",
+               "dataStoreUser":"sa",
+               "dataStorePassword":"dataStoreTestQuery",
+               "dataStoreTestQuery":"SET NOCOUNT ON;select test='test';",
+               "dataStoreLogFile":"/usr/local/tomcat/logs/datastore.log",
+               "dataStoreInitConns":10,
+               "dataStoreMaxConns":100,
+               "dataStoreConnUsageLimit":100,
+               "dataStoreLogLevel":"debug",
+               "maxUrlLength":500
+            }
+         },
+         {
+            "servlet-name":"cofaxEmail",
+            "servlet-class":"org.cofax.cds.EmailServlet",
+            "init-param":{
+               "mailHost":"mail1",
+               "mailHostOverride":"mail2"
+            }
+         },
+         {
+            "servlet-name":"cofaxAdmin",
+            "servlet-class":"org.cofax.cds.AdminServlet"
+         },
+         {
+            "servlet-name":"fileServlet",
+            "servlet-class":"org.cofax.cds.FileServlet"
+         },
+         {
+            "servlet-name":"cofaxTools",
+            "servlet-class":"org.cofax.cms.CofaxToolsServlet",
+            "init-param":{
+               "templatePath":"toolstemplates/",
+               "log":1,
+               "logLocation":"/usr/local/tomcat/logs/CofaxTools.log",
+               "logMaxSize":"",
+               "dataLog":1,
+               "dataLogLocation":"/usr/local/tomcat/logs/dataLog.log",
+               "dataLogMaxSize":"",
+               "removePageCache":"/content/admin/remove?cache=pages&id=",
+               "removeTemplateCache":"/content/admin/remove?cache=templates&id=",
+               "fileTransferFolder":"/usr/local/tomcat/webapps/content/fileTransferFolder",
+               "lookInContext":1,
+               "adminGroupID":4,
+               "betaServer":true
+            }
+         }
+      ],
+      "servlet-mapping":{
+         "cofaxCDS":"/",
+         "cofaxEmail":"/cofaxutil/aemail/*",
+         "cofaxAdmin":"/admin/*",
+         "fileServlet":"/static/*",
+         "cofaxTools":"/tools/*"
+      },
+      "taglib":{
+         "taglib-uri":"cofax.tld",
+         "taglib-location":"/WEB-INF/tlds/cofax.tld"
+      }
+   }
+}`;
+            this.hasCounter = false;
+            this.disabled = false;
+            if (this.sampleTimer) {
+              this.stopClock();
+            }
+            break;
+          case "long":
+            this.disabled = false;
+            this.key = "super_long_key";
+            this.value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. ";
+            this.hasCounter = true;
+            if (this.sampleTimer) {
+              this.stopClock();
+            }
+            break;
+        }
+      }
+    },
+    methods: {
+      installed: function () {
+        this.isInstalled = true;
+      },
+      startClock: function() {
+        this.sampleTimer = setInterval(() => {
+          const now = new Date();
+          this.value = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+        });
+      },
+      stopClock: function() {
+        clearInterval(this.sampleTimer);
+        this.sampleTimer = null;
+      }
+    }
+  });
+
+  setTimeout(function () {
+    document.getElementById("iframe").src = "chrome-extension://giompennnhheakjcnobejbnjgbbkmdnd/installed.html";
+  }, 500);
+</script>
+</body>
+</html>
