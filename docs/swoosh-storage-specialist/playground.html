@@ -14,7 +14,8 @@
 <h1 class="text-center title is-1 mt-12">Web Storage Playground</h1>
 <h2 class="text-center title is-6 mt-4">
   Local Storage / Session Storage / Cookie 3 in 1 chrome extension:
-  <a href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd" class="underline">Swoosh Storage Specialist</a>
+  <a href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd"
+    class="underline">Swoosh Storage Specialist</a>
 </h2>
 <div id="app">
   <section class="section">
@@ -43,9 +44,23 @@
         </div>
         <div class="column">
           <div class="text-center">
-            <b-button class="text-xl" type="is-text" tag="a"
-              href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd">
-              Install chrome extension ? {{ isInstalled }}
+            <b-button
+              v-if="!isInstalled"
+              class="text-xl"
+              type="is-text"
+              tag="a"
+              href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd"
+            >
+              Install Chrome Extension: Swoosh Storage Specialist
+            </b-button>
+            <b-button
+              v-else
+              class="text-xl"
+              type="is-text"
+              tag="a"
+              href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd/review/"
+            >
+              Like Swoosh Storage Specialist? Write a review
             </b-button>
           </div>
         </div>
@@ -67,10 +82,29 @@
               icon-right="no"
             ></b-input>
           </b-field>
-          <b-button :type="theme" size="is-large">Save {{displayType}}</b-button>
+          <template v-if="preset !== 'clock'">
+            <b-button :type="theme" size="is-large" @click="save">Save {{displayType}}</b-button>
+          </template>
+          <template v-else>
+            <b-button
+              :type="theme"
+              :disabled="isTimerStarted"
+              size="is-large"
+              @click="setClock"
+            >
+              Kickoff Clock in {{displayType}}
+            </b-button>
+            <b-button
+              :disabled="!isTimerStarted"
+              @click="clearClock"
+              type="is-light"
+              size="is-large"
+            >
+              Clear
+            </b-button>
+          </template>
         </div>
         <div class="column">
-
           <div class="field">
             <b-radio
               v-model="preset"
@@ -82,26 +116,34 @@
           </div>
           <div class="field">
             <b-radio v-model="preset"
-              native-value="clock"
+              native-value="json-simple"
               type="is-success"
             >
-              Clock (Auto update every second)
+              Simple JSON
             </b-radio>
           </div>
           <div class="field">
             <b-radio v-model="preset"
-              native-value="json"
+              native-value="json-long"
               type="is-success"
             >
-              JSON
+              Complicated JSON
             </b-radio>
           </div>
           <div class="field">
             <b-radio v-model="preset"
               native-value="long"
               type="is-success"
-             >
+            >
               Long Text
+            </b-radio>
+          </div>
+          <div class="field">
+            <b-radio v-model="preset"
+              native-value="clock"
+              type="is-success"
+            >
+              Clock (Auto update every second)
             </b-radio>
           </div>
         </div>
@@ -117,6 +159,7 @@
 <iframe id="iframe" style="display: none"></iframe>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://unpkg.com/buefy/dist/buefy.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script>
   window.playground = new Vue({
     el: '#app',
@@ -129,6 +172,9 @@
       message: 'Playground',
       selectedType: 'local',
       preset: 'freestyle',
+      localTimer: null,
+      sessionTimer: null,
+      cookieTimer: null,
       sampleTimer: null
     },
     computed: {
@@ -157,11 +203,16 @@
       },
       keyPlaceHolder: function () {
         return this.displayType + ' Key';
+      },
+      isTimerStarted: function() {
+        if (this.selectedType === "local") return this.localTimer !== null;
+        if (this.selectedType === "session") return this.sessionTimer !== null;
+        if (this.selectedType === "cookie") return this.cookieTimer !== null;
       }
     },
     watch: {
       preset: function (val) {
-        switch(val) {
+        switch (val) {
           case "freestyle":
             this.key = "";
             this.value = "";
@@ -177,8 +228,17 @@
             this.disabled = true;
             this.startClock();
             break;
-          case "json":
-            this.key = "json";
+          case "json-simple":
+            this.key = "simple-json";
+            this.value = '{"key":"value", "bool": true, "num": 1, "arr":[]}';
+            this.hasCounter = false;
+            this.disabled = false;
+            if (this.sampleTimer) {
+              this.stopClock();
+            }
+            break;
+          case "json-long":
+            this.key = "complicated-json";
             this.value = `{
    "web-app":{
       "servlet":[
@@ -287,8 +347,8 @@
             break;
           case "long":
             this.disabled = false;
-            this.key = "super_long_key";
-            this.value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. ";
+            this.key = "not_super_long_key";
+            this.value = "But Super Long Value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus urna eget tristique consectetur. Aenean fermentum ultrices nisl vitae ultrices. Etiam sed mauris ante. Aliquam vestibulum sem in lorem feugiat, a bibendum est interdum. Nullam tempus risus ut dolor ultrices, eu elementum quam convallis. Suspendisse potenti. Integer faucibus cursus porta. Integer mi ipsum, sollicitudin ac ante id, ornare consectetur elit. ";
             this.hasCounter = true;
             if (this.sampleTimer) {
               this.stopClock();
@@ -298,18 +358,68 @@
       }
     },
     methods: {
+      save: function () {
+        switch (this.selectedType) {
+          case "local":
+            localStorage.setItem(this.key, this.value);
+            break;
+          case "session":
+            sessionStorage.setItem(this.key, this.value);
+            break;
+          case "cookie":
+            Cookies.set(this.key, this.value);
+            break;
+        }
+      },
       installed: function () {
         this.isInstalled = true;
       },
-      startClock: function() {
+      startClock: function () {
         this.sampleTimer = setInterval(() => {
           const now = new Date();
           this.value = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
         });
       },
-      stopClock: function() {
+      stopClock: function () {
         clearInterval(this.sampleTimer);
         this.sampleTimer = null;
+      },
+      setClock: function() {
+        if (this.selectedType === "local") {
+          this.localTimer = setInterval(() => {
+            const now = new Date();
+            const clock = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            localStorage.setItem(this.key, clock);
+          }, 1000);
+        }
+        if (this.selectedType === "session") {
+          this.sessionTimer = setInterval(() => {
+            const now = new Date();
+            const clock = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            sessionStorage.setItem(this.key, clock);
+          }, 1000);
+        }
+        if (this.selectedType === "cookie") {
+          this.cookieTimer = setInterval(() => {
+            const now = new Date();
+            const clock = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+            Cookies.set(this.key, clock);
+          }, 1000);
+        }
+      },
+      clearClock: function() {
+        if (this.selectedType === "local") {
+          clearInterval(this.localTimer);
+          this.localTimer = null;
+        }
+        if (this.selectedType === "session") {
+          clearInterval(this.sessionTimer);
+          this.sessionTimer = null;
+        }
+        if (this.selectedType === "cookie") {
+          clearInterval(this.cookieTimer);
+          this.cookieTimer = null;
+        }
       }
     }
   });
