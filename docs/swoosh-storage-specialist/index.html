@@ -19,18 +19,15 @@
       background-color: #FABF09;
     }
 
-    .orange {
-      background-color: #E2540C;
-    }
-
     .page > div {
-      height: 33.33333%;
+      flex: 1 1 0%;
     }
 
     .title {
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
     }
 
     h1 {
@@ -38,6 +35,85 @@
       color: #E2540C;
       font-size: 60px;
     }
+
+    .orange {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background-color: #E2540C;
+      display: flex;
+    }
+
+    .orange > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin: 3rem 0;
+    }
+
+    .orange > div > a {
+      flex: 1 1 0%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: #FFF;
+      border-radius: 1rem;
+      overflow: hidden;
+      height: 100%;
+      margin: 0 3rem;
+      text-decoration: none;
+    }
+
+    .orange > div > a:hover {
+      box-shadow: #fff 0px 0px 50px;
+    }
+
+    .orange > div > a > label {
+      margin-top: 1rem;
+      font-size: 1.6rem;
+    }
+
+    .club {
+      color: #fff;
+    }
+
+    .hero__grid-container {
+      display: flex;
+      align-items: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero__grid-container > .hero__grid {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .hero__grid-container > .hero__grid > .hero__grid__stamp {
+      position: absolute;
+      z-index: 2;
+      background-color: transparent;
+      height: 80px;
+      width: 20%;
+      left: 40%;
+      bottom: 0;
+    }
+
+    .hero__grid-container > .hero__grid > div {
+      background-color: hsla(39, 100%, 50%, 0.9);
+    }
+
+    footer {
+      text-align: center;
+      color: #666;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      width: 100%;
+      margin-bottom: 3rem;
+    }
+
   </style>
 </head>
 <body>
@@ -46,15 +122,34 @@
     <h1>Swoosh Storage Specialist</h1>
   </div>
   <div class="orange">
-    1,2,3,4
+    <div>
+      <a class="download"
+        href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd">
+        <img src="assets/ChromeWebStore_Badge_v2_496x150.png" width="248" height="75"/>
+        <label>1. Install Extension</label>
+      </a>
+      <a href="./playground.html">
+        <img src="assets/playground.png" width="248" height="75"/>
+        <label>2. Try Playground</label>
+      </a>
+      <a href="https://github.com/sponsors/AndreLion">
+        <div class="club">
+          <svg style="width:75px;height:75px" viewBox="0 0 24 24">
+            <path fill="currentColor"
+              d="M12,2C14.3,2 16.3,4 16.3,6.2C16.21,8.77 14.34,9.83 14.04,10C15.04,9.5 16.5,9.5 16.5,9.5C19,9.5 21,11.3 21,13.8C21,16.3 19,18 16.5,18C16.5,18 15,18 13,17C13,17 12.7,19 15,22H9C11.3,19 11,17 11,17C9,18 7.5,18 7.5,18C5,18 3,16.3 3,13.8C3,11.3 5,9.5 7.5,9.5C7.5,9.5 8.96,9.5 9.96,10C9.66,9.83 7.79,8.77 7.7,6.2C7.7,4 9.7,2 12,2Z"/>
+          </svg>
+        </div>
+        <label>3. Join Club</label>
+      </a>
+    </div>
   </div>
-  <div>
-    <div><a href="./playground.html">Playground</a></div>
-    <div><a href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd">Chrome Web Store - Swoosh Storage Specialist</a></div>
-    <div><a href="https://github.com/apps/swoosh-storage-specialist">Github App</a></div>
-    <div><a href="https://github.com/login/oauth/authorize?client_id=Iv1.61f6953401d1611b&redirect_uri=https%3A%2F%2Fsteampunck.github.io%2Fswoosh-storage-specialist%2Fclub%2F">Github OAuth</a></div>
+  <div class="hero__grid-container">
+    <div class="hero__grid">
+      <div class="hero__grid__stamp"></div>
+    </div>
+    <footer>&copy; steampunck</footer>
   </div>
 </div>
-
+<script src="assets/packery.pkgd.min.js"></script>
 </body>
 </html>

@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <title>Playground | Swoosh Storage Specialist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-  </style>
   <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
@@ -23,20 +21,13 @@
       <div class="columns">
         <div class="column">
           <b-field>
-            <b-radio-button
-              v-model="selectedType"
-              native-value="local"
-              type="is-primary">
+            <b-radio-button v-model="selectedType" native-value="local" type="is-primary">
               <span>Local Storage</span>
             </b-radio-button>
-            <b-radio-button v-model="selectedType"
-              native-value="session"
-              type="is-info">
+            <b-radio-button v-model="selectedType" native-value="session" type="is-info">
               <span>Session Storage</span>
             </b-radio-button>
-            <b-radio-button v-model="selectedType"
-              native-value="cookie"
-              type="is-warning">
+            <b-radio-button v-model="selectedType" native-value="cookie" type="is-warning">
               <span>Cookie</span>
             </b-radio-button>
           </b-field>
@@ -44,20 +35,12 @@
         </div>
         <div class="column">
           <div class="text-center">
-            <b-button
-              v-if="!isInstalled"
-              class="text-xl"
-              type="is-success"
-              tag="a"
+            <b-button v-if="!isInstalled" class="text-xl" type="is-success" tag="a"
               href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd"
             >
               Install Chrome Extension: Swoosh Storage Specialist
             </b-button>
-            <b-button
-              v-else
-              class="text-xl"
-              type="is-text"
-              tag="a"
+            <b-button v-else class="text-xl" type="is-text" tag="a"
               href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd/review/"
             >
               Like Swoosh Storage Specialist? Write a review
@@ -86,63 +69,47 @@
             <b-button :type="theme" size="is-large" @click="save">Save {{displayType}}</b-button>
           </template>
           <template v-else>
-            <b-button
-              :type="theme"
-              :disabled="isTimerStarted"
-              size="is-large"
-              @click="setClock"
-            >
+            <b-button :type="theme" :disabled="isTimerStarted" size="is-large" @click="setClock">
               Kickoff Clock in {{displayType}}
             </b-button>
-            <b-button
-              :disabled="!isTimerStarted"
-              @click="clearClock"
-              type="is-light"
-              size="is-large"
-            >
+            <b-button :disabled="!isTimerStarted" @click="clearClock" type="is-light" size="is-large">
               Clear
             </b-button>
           </template>
         </div>
         <div class="column">
           <div class="field">
-            <b-radio
-              v-model="preset"
-              native-value="freestyle"
-              type="is-success"
-            >
+            <b-radio v-model="preset" native-value="freestyle" type="is-success">
               Freestyle
             </b-radio>
           </div>
           <div class="field">
-            <b-radio v-model="preset"
-              native-value="json-simple"
-              type="is-success"
-            >
+            <b-radio v-model="preset" native-value="json-simple" type="is-success">
               Simple JSON
             </b-radio>
           </div>
           <div class="field">
-            <b-radio v-model="preset"
-              native-value="json-long"
-              type="is-success"
-            >
+            <b-radio v-model="preset" native-value="json-long" type="is-success">
               Complicated JSON
             </b-radio>
           </div>
           <div class="field">
-            <b-radio v-model="preset"
-              native-value="long"
-              type="is-success"
-            >
+            <b-radio v-model="preset" native-value="url-encoded-text" type="is-success">
+              URL Encoded Text
+            </b-radio>
+          </div>
+          <div class="field">
+            <b-radio v-model="preset" native-value="url-encoded-json" type="is-success">
+              URL Encoded JSON
+            </b-radio>
+          </div>
+          <div class="field">
+            <b-radio v-model="preset" native-value="long" type="is-success">
               Long Text
             </b-radio>
           </div>
           <div class="field">
-            <b-radio v-model="preset"
-              native-value="clock"
-              type="is-success"
-            >
+            <b-radio v-model="preset" native-value="clock" type="is-success">
               Clock (Auto update every second)
             </b-radio>
           </div>
@@ -204,7 +171,7 @@
       keyPlaceHolder: function () {
         return this.displayType + ' Key';
       },
-      isTimerStarted: function() {
+      isTimerStarted: function () {
         if (this.selectedType === "local") return this.localTimer !== null;
         if (this.selectedType === "session") return this.sessionTimer !== null;
         if (this.selectedType === "cookie") return this.cookieTimer !== null;
@@ -354,6 +321,24 @@
               this.stopClock();
             }
             break;
+          case "url-encoded-text":
+            this.disabled = false;
+            this.key = "url_encoded_text";
+            this.value = "There're%20100%25%20java%2Fscript%20%26%20HTML%20(not%20%225%22)%2C%20which%20cost%20%249.9%20%2B%201%20%3D%20%2410.9%20%40%20line%20%234%3F!";
+            this.hasCounter = false;
+            if (this.sampleTimer) {
+              this.stopClock();
+            }
+            break;
+          case "url-encoded-json":
+            this.disabled = false;
+            this.key = "url_encoded_json";
+            this.value = "%7B%22percentage%22%3A%22100%25%22%2C%22arr%22%3A%5B123%2C%7B%7D%2C%22B%26W%22%5D%2C%22regex%22%3Anull%7D";
+            this.hasCounter = false;
+            if (this.sampleTimer) {
+              this.stopClock();
+            }
+            break;
         }
       }
     },
@@ -384,7 +369,7 @@
         clearInterval(this.sampleTimer);
         this.sampleTimer = null;
       },
-      setClock: function() {
+      setClock: function () {
         if (this.selectedType === "local") {
           this.localTimer = setInterval(() => {
             const now = new Date();
@@ -407,7 +392,7 @@
           }, 1000);
         }
       },
-      clearClock: function() {
+      clearClock: function () {
         if (this.selectedType === "local") {
           clearInterval(this.localTimer);
           this.localTimer = null;
@@ -425,7 +410,7 @@
   });
 
   setTimeout(function () {
-    document.getElementById("iframe").src = "chrome-extension://giompennnhheakjcnobejbnjgbbkmdnd/installed.html";
+    document.getElementById("iframe").src = "chrome-extension://inlhjjhkifegoiohognmfogbcjnnknpp/installed.html";
   }, 500);
 </script>
 </body>

@@ -3,11 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <title>Redirecting | Swoosh Storage Specialist Club</title>
+  <style>
+    html {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      padding-top: 2rem;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    span {
+      margin: 0 0.5rem;
+      color: #333;
+    }
+
+    strong {
+      font-size: 2rem;
+      color: #999;
+    }
+  </style>
 </head>
 <body>
-  Redirecting to Swoosh Storage Specialist Club ♣️
-  <script>
+<div>
+  <strong>♣</strong>️
+  <span>Redirecting to Swoosh Storage Specialist Club</span>
+  <strong>♣</strong>️
+</div>
+<script>
+  if (document.referrer.startsWith("http://localhost")) {
+    location.assign("http://localhost:8968/callback/swoosh-storage-specialist" + location.search);
+  } else {
     location.assign("https://steampunck.herokuapp.com/callback/swoosh-storage-specialist" + location.search);
-  </script>
+  }
+</script>
 </body>
 </html>
