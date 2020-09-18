@@ -35,13 +35,14 @@
       font-family: 'ABeeZee', sans-serif;
       color: #E2540C;
       font-size: 60px;
+      margin: 0;
     }
 
     h2 {
       color: #666;
       font-size: 1.3rem;
       font-weight: normal;
-      margin: 0;
+      margin: 1rem 0 0 0;
     }
 
     .orange {
@@ -71,13 +72,15 @@
       text-decoration: none;
     }
 
-    .orange > div > a:hover {
+    .orange > div > a:hover,
+    .orange > div > a.highlight {
       box-shadow: #fff 0px 0px 50px;
     }
 
     .orange > div > a > label {
       margin-top: 1rem;
       font-size: 1.6rem;
+      cursor: pointer;
     }
 
     .club {
@@ -139,7 +142,7 @@
         <img src="assets/playground.png" width="248" height="75"/>
         <label>2. Try Playground</label>
       </a>
-      <a href="https://github.com/sponsors/AndreLion">
+      <a href="https://github.com/sponsors/AndreLion" id="join-club">
         <div class="club">
           <svg style="width:75px;height:75px" viewBox="0 0 24 24">
             <path fill="currentColor"
@@ -158,5 +161,10 @@
   </div>
 </div>
 <script src="assets/packery.pkgd.min.js"></script>
+<script>
+  if(location.hash && document.querySelector(location.hash)) {
+    document.querySelector(location.hash).classList.add('highlight');
+  }
+</script>
 </body>
 </html>

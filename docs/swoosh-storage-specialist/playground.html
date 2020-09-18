@@ -7,13 +7,67 @@
   <link rel="stylesheet" href="https://unpkg.com/buefy/dist/buefy.min.css">
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
   <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .footer {
+      background: rgb(255, 255, 255);
+      background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(250, 250, 250, 1) 50%, rgba(255, 255, 255, 1) 100%);
+    }
+
+    h2.title {
+      font-weight: normal;
+    }
+
+    h2.title > a {
+      padding: 0.5rem;
+    }
+
+    h2.title > a:hover {
+      text-decoration: none;
+      background-color: #FABF09;
+      color: #E2540C;
+    }
+
+    a.download,
+    a.download:hover {
+      background-color: #FABF09;
+      color: #E2540C;
+    }
+
+    a.review:hover {
+      background-color: rgba(66, 133, 244, 0.039);
+      border-color: #d2e3fc;
+      color: #1a73e8;
+    }
+
+    .snackbar {
+      box-shadow: none !important;
+      min-width: 300px !important;
+    }
+
+    .snackbar > .content {
+      width: 270px;
+      margin: 0 !important;
+    }
+
+    .snackbar > .icon {
+      border-radius: 999px;
+      background-color: #444;
+      width: 40px;
+      height: 40px;
+    }
+
+    .snackbar > .icon > img {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
 </head>
 <body>
 <h1 class="text-center title is-1 mt-12">Web Storage Playground</h1>
-<h2 class="text-center title is-6 mt-4">
-  Local Storage / Session Storage / Cookie 3 in 1 chrome extension:
-  <a href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd"
-    class="underline">Swoosh Storage Specialist</a>
+<h2 class="text-center title is-5 mt-4">
+  <a href="./"
+    class="underline">Swoosh Storage Specialist</a>:
+  Chrome extension for managing cookie, local storage and session storage
 </h2>
 <div id="app">
   <section class="section">
@@ -35,13 +89,13 @@
         </div>
         <div class="column">
           <div class="text-center">
-            <b-button v-if="!isInstalled" class="text-xl" type="is-success" tag="a"
+            <b-button v-if="!isInstalled" class="text-xl download" tag="a"
               href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd"
             >
               Install Chrome Extension: Swoosh Storage Specialist
             </b-button>
-            <b-button v-else class="text-xl" type="is-text" tag="a"
-              href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd/review/"
+            <b-button v-else class="text-xl review" tag="a"
+              href="https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd/reviews/"
             >
               Like Swoosh Storage Specialist? Write a review
             </b-button>
@@ -65,17 +119,19 @@
               icon-right="no"
             ></b-input>
           </b-field>
-          <template v-if="preset !== 'clock'">
-            <b-button :type="theme" size="is-large" @click="save">Save {{displayType}}</b-button>
-          </template>
-          <template v-else>
-            <b-button :type="theme" :disabled="isTimerStarted" size="is-large" @click="setClock">
-              Kickoff Clock in {{displayType}}
-            </b-button>
-            <b-button :disabled="!isTimerStarted" @click="clearClock" type="is-light" size="is-large">
-              Clear
-            </b-button>
-          </template>
+          <transition name="fade" mode="out-in">
+            <template v-if="preset !== 'clock'">
+              <b-button :type="theme" size="is-large" @click="save">Save {{displayType}}</b-button>
+            </template>
+            <template v-else>
+              <b-button :type="theme" :disabled="isTimerStarted" size="is-large" @click="setClock">
+                Kickoff Clock in {{displayType}}
+              </b-button>
+              <b-button :disabled="!isTimerStarted" @click="clearClock" type="is-light" size="is-large">
+                Clear
+              </b-button>
+            </template>
+          </transition>
         </div>
         <div class="column">
           <div class="field">
@@ -344,16 +400,19 @@
     },
     methods: {
       save: function () {
-        switch (this.selectedType) {
-          case "local":
-            localStorage.setItem(this.key, this.value);
-            break;
-          case "session":
-            sessionStorage.setItem(this.key, this.value);
-            break;
-          case "cookie":
-            Cookies.set(this.key, this.value);
-            break;
+        if (this.key) {
+          switch (this.selectedType) {
+            case "local":
+              localStorage.setItem(this.key, this.value);
+              break;
+            case "session":
+              sessionStorage.setItem(this.key, this.value);
+              break;
+            case "cookie":
+              Cookies.set(this.key, this.value);
+              break;
+          }
+          this.openSnackbar();
         }
       },
       installed: function () {
@@ -391,6 +450,7 @@
             Cookies.set(this.key, clock);
           }, 1000);
         }
+        this.openSnackbar();
       },
       clearClock: function () {
         if (this.selectedType === "local") {
@@ -405,12 +465,32 @@
           clearInterval(this.cookieTimer);
           this.cookieTimer = null;
         }
+      },
+      openSnackbar: function () {
+        if (!this.isInstalled) {
+          return;
+        }
+        this.$buefy.snackbar.open({
+          message: `
+<div class="snackbar">
+  <span class="content text">Open Swoosh Storage Specialist and see what changed</span>
+  <span class="icon"><img width="32" height="32" src="assets/icon.png"/></span>
+</div>
+`,
+          type: 'is-success',
+          position: 'is-top-right',
+          indefinite: false,
+          duration: 5000,
+          onAction: () => {
+          }
+        })
       }
     }
   });
 
   setTimeout(function () {
-    document.getElementById("iframe").src = "chrome-extension://inlhjjhkifegoiohognmfogbcjnnknpp/installed.html";
+    const id = location.hostname === "localhost" ? "inlhjjhkifegoiohognmfogbcjnnknpp" : "giompennnhheakjcnobejbnjgbbkmdnd";
+    document.getElementById("iframe").src = `chrome-extension://${id}/installed.html`;
   }, 500);
 </script>
 </body>

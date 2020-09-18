@@ -1,169 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>steampunck</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            background: #FFF;
-            padding: 5rem 1rem;
-        }
+  <meta charset="UTF-8">
+  <title>steampunck</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: #FFF;
+      padding: 5rem 1rem;
+    }
 
-        .logo {
-            position: relative;
-            height: 300px;
-            width: 300px;
-            display: flex;
-            overflow: hidden;
-            background: #FFF;
-            margin: auto;
-        }
+    .logo {
+      position: relative;
+      height: 300px;
+      width: 300px;
+      display: flex;
+      overflow: hidden;
+      background: #FFF;
+      margin: auto;
+    }
 
-        .gear {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: auto;
-            background: #000;
-            border-radius: 50%;
-            animation-name: spin;
-            animation-duration: 14s;
-            animation-iteration-count: infinite;
-            animation-timing-function: linear;
-        }
+    .gear {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: auto;
+      background: #000;
+      border-radius: 50%;
+      animation-name: spin;
+      animation-duration: 14s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
 
-        .tooth {
-            position: absolute;
-            top: -30px;
-            left: 75px;
-            z-index: 1;
-            width: 50px;
-            height: 260px;
-            background: #000;
-            border-radius: 6px;
-        }
+    .tooth {
+      position: absolute;
+      top: -30px;
+      left: 75px;
+      z-index: 1;
+      width: 50px;
+      height: 260px;
+      background: #000;
+      border-radius: 6px;
+    }
 
-        .tooth:nth-child(2) {
-            transform: rotate(45deg);
-        }
+    .tooth:nth-child(2) {
+      transform: rotate(45deg);
+    }
 
-        .tooth:nth-child(3) {
-            transform: rotate(90deg);
-        }
+    .tooth:nth-child(3) {
+      transform: rotate(90deg);
+    }
 
-        .tooth:nth-child(4) {
-            transform: rotate(135deg);
-        }
+    .tooth:nth-child(4) {
+      transform: rotate(135deg);
+    }
 
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
-        .gap,
-        .face,
-        .hair,
-        .bangs,
-        .mask,
-        .ring {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .gap,
+    .face,
+    .hair,
+    .bangs,
+    .mask,
+    .ring {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .bangs,
-        .hair {
-            align-items: flex-start;
-        }
+    .bangs,
+    .hair {
+      align-items: flex-start;
+    }
 
-        .gap > div {
-            background-color: #FFF;
-            height: 174px;
-            width: 174px;
-            border-radius: 165px;
-        }
+    .gap > div {
+      background-color: #FFF;
+      height: 174px;
+      width: 174px;
+      border-radius: 165px;
+    }
 
-        .ring > div {
-            background-color: #000;
-            height: 166px;
-            width: 166px;
-            border-radius: 150px;
-        }
+    .ring > div {
+      background-color: #000;
+      height: 166px;
+      width: 166px;
+      border-radius: 150px;
+    }
 
-        .face > div {
-            background-color: #FFF;
-            height: 132px;
-            width: 132px;
-            border-radius: 120px;
-        }
+    .face > div {
+      background-color: #FFF;
+      height: 132px;
+      width: 132px;
+      border-radius: 120px;
+    }
 
-        .hair > div {
-            background-color: #000;
-            height: 44px;
-            width: 125px;
-            border-top-left-radius: 30px;
-            border-top-right-radius: 30px;
-            margin-top: 82px;
-        }
+    .hair > div {
+      background-color: #000;
+      height: 44px;
+      width: 125px;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      margin-top: 82px;
+    }
 
-        .bangs > div {
-            background-color: #000;
-            height: 22px;
-            width: 124px;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-            margin-top: 119px;
-        }
+    .bangs > div {
+      background-color: #000;
+      height: 22px;
+      width: 124px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      margin-top: 119px;
+    }
 
-        .mask > h1 {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-weight: 600;
-            font-size: 46px;
-            background-color: #FFF;
-            height: 140px;
-            width: 100%;
-            margin-top: 200px;
-            text-align: center;
-            padding-top: 10px;
-        }
-    </style>
+    .mask > h1 {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-weight: 600;
+      font-size: 46px;
+      background-color: #FFF;
+      height: 140px;
+      width: 100%;
+      margin-top: 200px;
+      text-align: center;
+      padding-top: 10px;
+    }
+  </style>
 </head>
 <body>
 <div class="logo">
-    <div class="gear">
-        <div class="tooth"></div>
-        <div class="tooth"></div>
-        <div class="tooth"></div>
-        <div class="tooth"></div>
-    </div>
-    <div class="gap">
-        <div></div>
-    </div>
-    <div class="ring">
-        <div></div>
-    </div>
-    <div class="face">
-        <div></div>
-    </div>
-    <div class="hair">
-        <div></div>
-    </div>
-    <div class="bangs">
-        <div></div>
-    </div>
-    <div class="mask">
-        <h1>steampunck</h1>
-    </div>
+  <div class="gear">
+    <div class="tooth"></div>
+    <div class="tooth"></div>
+    <div class="tooth"></div>
+    <div class="tooth"></div>
+  </div>
+  <div class="gap">
+    <div></div>
+  </div>
+  <div class="ring">
+    <div></div>
+  </div>
+  <div class="face">
+    <div></div>
+  </div>
+  <div class="hair">
+    <div></div>
+  </div>
+  <div class="bangs">
+    <div></div>
+  </div>
+  <div class="mask">
+    <h1>steampunck</h1>
+  </div>
 </div>
 </body>
 </html>
