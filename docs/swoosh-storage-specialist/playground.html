@@ -45,7 +45,7 @@
     }
 
     .snackbar > .content {
-      width: 270px;
+      width: 275px;
       margin: 0 !important;
     }
 
@@ -466,23 +466,37 @@
         }
       },
       openSnackbar: function () {
-        if (!this.isInstalled) {
-          return;
-        }
-        this.$buefy.snackbar.open({
-          message: `
+        if (this.isInstalled) {
+          this.$buefy.snackbar.open({
+            message: `
 <div class="snackbar">
   <span class="content text">Open Swoosh Storage Specialist and see what changed</span>
   <span class="icon"><img width="32" height="32" src="assets/icon.png"/></span>
 </div>
 `,
-          type: 'is-success',
-          position: 'is-top-right',
-          indefinite: false,
-          duration: 5000,
-          onAction: () => {
-          }
-        })
+            type: 'is-success',
+            position: 'is-top-right',
+            indefinite: false,
+            duration: 5000,
+            onAction: () => {
+            }
+          })
+        } else {
+          this.$buefy.snackbar.open({
+            message: `
+<div class="snackbar">
+  <span class="content text">Install Swoosh Storage Specialist</span>
+</div>
+`,
+            type: 'is-success',
+            position: 'is-top-right',
+            indefinite: true,
+            actionText: 'Go to Chrome Web Store',
+            onAction: () => {
+              location.assign('https://chrome.google.com/webstore/detail/swoosh-storage-specialist/giompennnhheakjcnobejbnjgbbkmdnd');
+            }
+          })
+        }
       }
     }
   });
