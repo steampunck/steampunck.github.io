@@ -182,7 +182,6 @@
 <iframe id="iframe" style="display: none"></iframe>
 <script src="./assets/vue.min.js"></script>
 <script src="./assets/buefy.min.js"></script>
-<script src="./assets/js.cookie.min.js"></script>
 <script>
   window.playground = new Vue({
     el: '#app',
@@ -409,7 +408,7 @@
               sessionStorage.setItem(this.key, this.value);
               break;
             case "cookie":
-              Cookies.set(this.key, this.value);
+              document.cookie = this.key + "=" + (this.value || "") + "; path=/";
               break;
           }
           this.openSnackbar();
@@ -447,7 +446,7 @@
           this.cookieTimer = setInterval(() => {
             const now = new Date();
             const clock = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-            Cookies.set(this.key, clock);
+            document.cookie = this.key + "=" + (clock || "") + "; path=/";
           }, 1000);
         }
         this.openSnackbar();
