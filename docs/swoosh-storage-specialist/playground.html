@@ -64,16 +64,16 @@
 </head>
 <body>
 <h1 class="text-center title is-1 mt-12">Web Storage Playground</h1>
-<h2 v-if="!isInstalled" class="text-center title is-5 mt-4">
-  <a href="./"
-    class="underline">Swoosh Storage Specialist</a>:
-  Chrome extension for managing cookie, local storage and session storage
-</h2>
-<h2 v-else class="text-center title is-5 mt-4">
-  Thank you for installing Swoosh Storage Specialist,
-  You can try out this extension by editing storage / cookie on this page.
-</h2>
 <div id="app">
+  <h2 v-if="!isInstalled" class="text-center title is-5 mt-4">
+    <a href="./"
+      class="underline">Swoosh Storage Specialist</a>:
+    Chrome extension for managing cookie, local storage and session storage
+  </h2>
+  <h2 v-else class="text-center title is-5 mt-4">
+    Thank you for installing Swoosh Storage Specialist,
+    You can try out this extension by editing storage / cookie on this page.
+  </h2>
   <section class="section">
     <div class="container">
       <div class="columns">
